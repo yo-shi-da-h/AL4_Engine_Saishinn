@@ -17,6 +17,7 @@ void Player::Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera
 	assert(model);
 	model_ = model;
 	camera_ = camera;
+	
 	modelbullet_ = KamataEngine::Model::CreateFromOBJ("cube", true);
 	worldtransfrom_.translation_ = pos;
 	input_ = KamataEngine::Input::GetInstance();
