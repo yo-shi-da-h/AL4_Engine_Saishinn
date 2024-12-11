@@ -68,6 +68,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		imguiManager->Begin();
 		// 入力関連の毎フレーム処理
 		input->Update();
+		// ゲームシーンの毎フレーム処理
+		gameScene->Update();
 		// 軸表示の更新
 		axisIndicator->Update();
 		// ImGui受付終了
@@ -75,6 +77,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		// 描画開始
 		dxCommon->PreDraw();
+		// ゲームシーンの描画
+		gameScene->Draw();
 		// 軸表示の描画
 		axisIndicator->Draw();
 		// プリミティブ描画のリセット
