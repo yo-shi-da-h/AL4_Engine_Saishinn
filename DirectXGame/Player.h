@@ -1,14 +1,17 @@
+
 #pragma once
 #include "PlayerBullet.h"
 #include <list>
 #include <3d/Model.h>
 #include <3d/Camera.h>
-#include <KamataEngine.h>
 #include "AABB.h"
+#include "MT.h"
+#include <KamataEngine.h>
 
 namespace KamataEngine { class Input; };
 
 class Enemy;
+
 class Player {
 public:
 	void Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera, const KamataEngine::Vector3& pos);
@@ -30,6 +33,8 @@ public:
 	static inline const float kHeight = 1.0f;
 
 	void SetEnemy(Enemy* enemy) { enemy_ = enemy; }
+
+	void SetParent(const WorldTransform* parent);
 
 private:
 	
@@ -53,4 +58,5 @@ private:
 
 	// 発射タイマー
 	int32_t spawnTimer = 0;
+
 };

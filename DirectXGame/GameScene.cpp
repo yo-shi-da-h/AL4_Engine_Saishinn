@@ -7,10 +7,11 @@ GameScene::GameScene() {}
 GameScene::~GameScene() {
 	delete modelPlayer_;
 	delete modelEnemy_;
+	delete modelSkydome_;
 	delete player_;
 	delete enemy_;
-	delete debugCamera_;
-	delete modelSkydome_;
+	delete skydome_;
+	delete railCamera_;
 }
 
 void GameScene::Initialize() {
@@ -25,22 +26,26 @@ void GameScene::Initialize() {
 	// 3Dモデルの生成
 	modelPlayer_ = KamataEngine::Model::CreateFromOBJ("cube", true);
 	modelEnemy_ = KamataEngine::Model::CreateFromOBJ("cube", true);
-	modelSkydome_ = KamataEngine::Model::CreateFromOBJ("skydome", true);
+	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
 
 	// ビュープロジェクションの初期化
-	camera_.Initialize();
+	//camera_.farZ = 1500.0f;
 
-	//playerPos.z = 0; 
+	Vector3 playerPos = {0, 0, 25};
+	camera_.Initialize();
 	player_->Initialize(modelPlayer_, &camera_, playerPos);
 	enemy_->Initialize(modelEnemy_, &camera_, enemyPos);
 	skydome_->Initialize(modelSkydome_, &camera_);
-
-	debugCamera_ = new DebugCamera(1280, 720);
 
 	// 軸方向表示の表示を有効にする
 	KamataEngine::AxisIndicator::GetInstance()->SetVisible(true);
 	// 軸方向表示が参照するビュープロジェクションを指定する（アドレス渡し）
 	KamataEngine::AxisIndicator::GetInstance()->SetTargetCamera(&camera_);
+
+	// Camera
+	railCamera_ = new RailCamera();
+	railCamera_->Initialize(railcameraPos, railcameraRad);
+	player_->SetParent(&railCamera_->GetWorldTransform());
 
 	// 敵キャラに自キャラのアドレスを渡す
 	enemy_->SetPlayer(player_);
@@ -48,28 +53,15 @@ void GameScene::Initialize() {
 }
 
 void GameScene::Update() { 
-	player_->Update();
+	
 	enemy_->Update();
-	debugCamera_->Update();
 	CheckAllCollisions();
-    
-#ifdef _DEBUG
 
-	    if (input_->TriggerKey(DIK_1)) {
-		isDebugCameraActive_ = !isDebugCameraActive_;
-	}
-#endif
-
-	if (isDebugCameraActive_) {
-		debugCamera_->Update();
-		camera_.matView = debugCamera_->GetCamera().matView;
-		camera_.matProjection = debugCamera_->GetCamera().matProjection;
-		camera_.TransferMatrix();
-
-	} else {
-	    camera_.UpdateMatrix();
-	}
-
+	railCamera_->Update();
+	player_->Update();
+	camera_.matView = railCamera_->GetViewProjection().matView;
+	camera_.matProjection = railCamera_->GetViewProjection().matProjection;
+	camera_.TransferMatrix();
 }
 
 void GameScene::Draw() {
@@ -90,6 +82,7 @@ void GameScene::Draw() {
 	player_->Draw(); 
 	enemy_->Draw();
 	skydome_->Draw();
+
 	 
 	/// </summary>
 	
@@ -100,7 +93,7 @@ void GameScene::Draw() {
 
 void GameScene::CheckAllCollisions() {
 
-	KamataEngine::Vector3 posA[4], posB[4];
+	KamataEngine::Vector3 posA[3]{}, posB[3]{};
 	float radiusA[3] = {0.8f, 2.0f, 0.8f}; // プレイヤーの半径（固定値）
 	float radiusB[3] = {0.8f, 2.0f, 0.8f}; // 敵弾の半径（固定値）
 
@@ -109,7 +102,7 @@ void GameScene::CheckAllCollisions() {
 	// 自弾
 	const std::list<PlayerBullet*>& playerBullets = player_->GetBullets();
 
-	#pragma region 自キャラと敵弾の当たり判定
+#pragma region 自キャラと敵弾の当たり判定
 
 	// 自キャラの座標
 	posA[0] = player_->GetWorldPosition();
@@ -134,9 +127,9 @@ void GameScene::CheckAllCollisions() {
 		}
 	}
 
-	#pragma endregion
+#pragma endregion
 
-	#pragma region 自弾と敵キャラの当たり判定	
+#pragma region 自弾と敵キャラの当たり判定	
 
 	// 敵
 	posA[1] = enemy_->GetWorldPosition();
@@ -153,12 +146,12 @@ void GameScene::CheckAllCollisions() {
 		}
 	}
 
-	#pragma endregion
+#pragma endregion
 
-	#pragma region 自弾と敵弾の当たり判定
+#pragma region 自弾と敵弾の当たり判定
 
-	for (PlayerBullet* bullet : playerBullets) {
-		for (EnemyBullet* bullet2 : enemyBullets) {
+	for (EnemyBullet* bullet : enemyBullets) {
+		for (PlayerBullet* bullet2 : playerBullets) {
 
 			posA[2] = bullet->GetWorldPosition();
 			posB[2] = bullet2->GetWorldPosition();
@@ -173,6 +166,15 @@ void GameScene::CheckAllCollisions() {
 		}
 	}
 
-	#pragma endregion
+#pragma endregion
 
 }
+
+/*/
+void GameScene::AddEnemyBullet(EnemyBullet* enemyBullet) {
+
+	enemyBullets
+
+
+}
+/*/
