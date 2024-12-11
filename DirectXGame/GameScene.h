@@ -2,7 +2,7 @@
 #include "KamataEngine.h" 
 #include "Player.h"
 #include "Enemy.h"
-
+#include "AABB.h"
 using namespace KamataEngine;
 
 class GameScene {
@@ -14,14 +14,17 @@ public:
 	void Initialize();
 	void Update();
 	void Draw();
+	// 衝突判定と応答
+	void CheckAllCollisions();
+
+	Player* player_ = nullptr;
+	Enemy* enemy_ = nullptr;
 
 private:
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
 	Audio* audio_ = nullptr;
 
-	Player* player_ = nullptr;
-	Enemy* enemy_ = nullptr;
 	Vector3 playerPos = {};
 	Vector3 enemyPos = {0, 3, 100};
 

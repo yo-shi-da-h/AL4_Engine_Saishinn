@@ -49,7 +49,9 @@ void Player::Attack() {
 	}
 }
 
-void Player::OnCollision() {}
+void Player::OnCollision() {
+	isDead_ = true;
+}
 
 // ワールド座標を取得
 KamataEngine::Vector3 Player::GetWorldPosition() { 
@@ -62,6 +64,18 @@ KamataEngine::Vector3 Player::GetWorldPosition() {
 	worldPos.z = worldtransfrom_.matWorld_.m[3][2];
 
 	return worldPos;
+}
+
+AABB Player::GetAABB()
+{
+	KamataEngine::Vector3 worldPos = GetWorldPosition();
+
+	AABB aabb;
+
+	aabb.min = {worldPos.x - kWidth / 2.0f, worldPos.y - kHeight / 2.0f, worldPos.z - kWidth / 2.0f};
+	aabb.max = {worldPos.x + kWidth / 2.0f, worldPos.y + kHeight / 2.0f, worldPos.z + kWidth / 2.0f};
+
+	return aabb;
 }
 
 void Player::Update() {

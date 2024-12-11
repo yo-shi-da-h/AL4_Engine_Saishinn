@@ -4,10 +4,11 @@
 #include <3d/Model.h>
 #include <3d/Camera.h>
 #include <KamataEngine.h>
+#include "AABB.h"
 
 namespace KamataEngine { class Input; };
 
-
+class Enemy;
 class Player {
 public:
 	void Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera, const KamataEngine::Vector3& pos);
@@ -19,6 +20,16 @@ public:
 	void OnCollision();
 
 	KamataEngine::Vector3 GetWorldPosition(); 
+
+	const std::list<PlayerBullet*>& GetBullets() const { return bullets_; }
+
+	// AABBを取得
+	AABB GetAABB();
+
+	static inline const float kWidth = 1.0f;
+	static inline const float kHeight = 1.0f;
+
+	void SetEnemy(Enemy* enemy) { enemy_ = enemy; }
 
 private:
 	
@@ -35,4 +46,11 @@ private:
 	// 弾
 	std::list<PlayerBullet*> bullets_;
 
+	bool isDead_ = false;
+	bool isParry_ = false;
+
+	Enemy* enemy_ = nullptr;
+
+	// 発射タイマー
+	int32_t spawnTimer = 0;
 };

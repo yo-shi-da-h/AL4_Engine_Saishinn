@@ -31,6 +31,10 @@ KamataEngine::Vector3 Enemy::GetWorldPosition() {
 	return worldPos;
 }
 
+void Enemy::OnCollision()
+{
+}
+
 void Enemy::Fire() {
 
 	assert(player_);

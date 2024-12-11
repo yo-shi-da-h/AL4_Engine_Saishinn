@@ -2,6 +2,7 @@
 #include <3d/Camera.h>
 #include <3d/Model.h>
 #include <3d/WorldTransform.h>
+#include "AABB.h"
 class EnemyBullet {
 public:
 	void Initialize(KamataEngine::Model* model, const KamataEngine::Vector3& position, const KamataEngine::Vector3& velocity);
@@ -13,6 +14,13 @@ public:
 	~EnemyBullet();
 
 	bool IsDead() const { return isDead_; }
+
+	// 衝突を検出したら呼び出されるコールバック関数
+	void OnCollision();
+
+	KamataEngine::Vector3 GetWorldPosition();
+
+	AABB GetAABB();
 
 private:
 
@@ -26,4 +34,7 @@ private:
 	int32_t deathTimer_ = kLifeTime;
 	// デスフラグ
 	bool isDead_ = false;
+
+	static inline const float kWidth = 1.0f;
+	static inline const float kHeight = 1.0f;
 };
