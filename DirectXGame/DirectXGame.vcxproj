@@ -114,6 +114,8 @@
     <ClCompile Include="MT.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerBullet.cpp" />
+    <ClCompile Include="RailCamera.cpp" />
+    <ClCompile Include="Skydome.cpp" />
     <ClCompile Include="worldTransformEx.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -199,7 +201,9 @@
     <ClInclude Include="MT.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerBullet.h" />
+    <ClInclude Include="RailCamera.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Skydome.h" />
     <ClInclude Include="worldTransformEx.h" />
   </ItemGroup>
   <ItemGroup>
