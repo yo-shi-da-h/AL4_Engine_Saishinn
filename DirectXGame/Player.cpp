@@ -3,6 +3,7 @@
 #include <cassert>
 #include <algorithm>
 
+
 Player::~Player() {
 	//model_ = nullptr;
 	//camera_ = nullptr;
@@ -136,10 +137,10 @@ void Player::Update() {
 	worldtransfrom_.translation_.x = std::clamp(worldtransfrom_.translation_.x, -kMoveLimitX, kMoveLimitX);
 	worldtransfrom_.translation_.y = std::clamp(worldtransfrom_.translation_.y, -kMoveLimitY, kMoveLimitY);
 
-	ImGui::Begin("Setmove");
+	/*ImGui::Begin("Setmove");
 	ImGui::SliderFloat("Move X", &worldtransfrom_.translation_.x, -1.0f, 1.0f);
 	ImGui::SliderFloat("Move Y", &worldtransfrom_.translation_.y, -1.0f, 1.0f);
-	ImGui::End();
+	ImGui::End();*/
 
 	worldtransfrom_.UpdateMatarix();
 
